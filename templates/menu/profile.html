@@ -1,0 +1,21 @@
+{%extends 'menu/base.html'%}
+{%block text%}
+{%if user.is_autentheticated%}
+<div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title"> 
+      {%if user.first_name%}
+      {{user.first_name}} 
+      {%else%}
+      david
+      {%endif%}
+      </h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+  {%else%}
+  <h2>To view profile you need login</h2>
+  {%endif%}
+{%endblock%}
