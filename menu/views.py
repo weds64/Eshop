@@ -1,3 +1,4 @@
+from typing import Any
 from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404
@@ -55,6 +56,9 @@ class Registration(CreateView):
 class Profile_View(TemplateView):
     model = User
     template_name = 'menu/profile.html'
+    # def __init__(self, **kwargs: Any) -> None:
+    #     super().__init__(**kwargs)
+    #     print(request.user)
     def get_context_data(self, *, object_list = None, **kwargs):
         context = super().get_context_data(**kwargs)
         context ['title'] = 'profile'
