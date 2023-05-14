@@ -29,4 +29,5 @@ urlpatterns = [
     path('registore/', Registration.as_view(), name = 'registore'),
     path('logout/', exit, name = 'logout'),
     path('login/', Login_User_View.as_view(), name = 'login'),
+    path('add_category/', Add_Category.as_view(), name = 'category'),
 ]
