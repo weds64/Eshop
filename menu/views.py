@@ -1,9 +1,10 @@
+from pyexpat import model
 from typing import Any
 from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import Category
-from django.views.generic import ListView, CreateView, TemplateView
+from django.views.generic import ListView, CreateView, TemplateView, DetailView
 from .forms import Regisration_Form, Category_Form, Product_Form
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -65,7 +66,15 @@ class Add_Category(CreateView):
         return context
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.save()
-        return reverse_lazy('menu')
+        return super(Add_Category, self).form_valid(form)
+
+class CategoryView(DetailView):
+    template_name = 'menu/category_detail.html'
+    model = Category
+    context_object_name = 'category'
+
+    # def get_queryset(self):
+    #     return Category.objects.get(pk=pk)
 
 class Profile_View(TemplateView):
     model = User

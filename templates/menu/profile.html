@@ -1,6 +1,6 @@
 {%extends 'menu/base.html'%}
 {%block text%}
-<a href ="{% url 'category' %}">add_category</a>
+<a href ="{% url 'category_add' %}">add_category</a>
 {%if request.user.is_authenticated%}
 <div class="card" style="width: 18rem;">
     <img src="..." class="card-img-top" alt="...">

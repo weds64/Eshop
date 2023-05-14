@@ -1,8 +1,12 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=30)
+
+    def get_absolute_url(self):
+        return reverse("category", kwargs={"pk": self.pk})
 
 class Products(models.Model):
     name = models.CharField(max_length=120)
