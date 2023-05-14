@@ -1,15 +1,20 @@
+from pyexpat import model
+from typing import Any
 from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import Category
-from django.views.generic import ListView, CreateView, TemplateView
-from .forms import Regisration_Form
+from django.views.generic import ListView, CreateView, TemplateView, DetailView
+from .forms import Regisration_Form, Category_Form, Product_Form
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib.auth import login, logout
 from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
+
+# add 2 view functions to see products and add products
+
 
 #crud 
 # Create your views here.
@@ -34,6 +39,7 @@ from django.contrib.auth.forms import AuthenticationForm
 class MenuView(ListView):
     model = Category
     template_name = 'menu/index.html'
+    context_object_name = 'categories'
     def get_context_data(self, *, object_list = None, **kwargs):
         context = super().get_context_data(**kwargs)
         context ['title'] = 'main'
@@ -51,13 +57,43 @@ class Registration(CreateView):
         user = form.save()
         login(self.request, user)
         return reverse_lazy('menu')
+    
+
+class Add_Category(CreateView):
+    form_class = Category_Form
+    template_name = 'menu/category.html'
+    # success_url = reverse_lazy('category')
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ['title'] = 'category'
+        return context
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        form.save()
+        return super(Add_Category, self).form_valid(form)
+
+def category_delete(request, pk):
+    category = Category.objects.get(pk = pk)
+    category.delete()
+    return redirect('menu')
+
+class CategoryView(DetailView):
+    template_name = 'menu/category_detail.html'
+    model = Category
+    context_object_name = 'category'
+
+    # def get_queryset(self):
+    #     return Category.objects.get(pk=pk)
 
 class Profile_View(TemplateView):
     model = User
     template_name = 'menu/profile.html'
+    # def __init__(self, **kwargs: Any) -> None:
+    #     super().__init__(**kwargs)
+    #     print(request.user)
     def get_context_data(self, *, object_list = None, **kwargs):
         context = super().get_context_data(**kwargs)
         context ['title'] = 'profile'
+        context['categories'] = Category.objects.all()
         return context
 
 class Login_User_View(LoginView):

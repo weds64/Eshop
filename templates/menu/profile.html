@@ -1,12 +1,13 @@
 {%extends 'menu/base.html'%}
 {%block text%}
-{%if user.is_autentheticated%}
+<a href ="{% url 'category_add' %}">add_category</a>
+{%if request.user.is_authenticated%}
 <div class="card" style="width: 18rem;">
     <img src="..." class="card-img-top" alt="...">
     <div class="card-body">
       <h5 class="card-title"> 
-      {%if user.first_name%}
-      {{user.first_name}} 
+      {%if user.username%}
+      {{user.username}} 
       {%else%}
       david
       {%endif%}
