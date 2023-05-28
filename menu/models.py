@@ -7,6 +7,8 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse("category", kwargs={"pk": self.pk})
+    def __str__(self) -> str:
+        return self.name
 
 class Products(models.Model):
     name = models.CharField(max_length=120)
@@ -15,6 +17,7 @@ class Products(models.Model):
     category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 # add products
+
 
 def menu(request):
     product = Products(name = 'NVIDIA Geforce 1650 Ti')

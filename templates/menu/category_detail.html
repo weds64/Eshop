@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{%extends 'menu/base.html'%}
+    {%block text%}
     {{ category.name }}
-    <a href = '{%url "category_delete" pk = category.pk%}'>delete_category</a>
-</head>
-<body>
-
-</body>
-</html>
+    <a href = '{%url "category_delete" category.pk%}'>delete_category</a>
+    {%endblock%}

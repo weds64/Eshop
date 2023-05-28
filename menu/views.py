@@ -4,7 +4,7 @@ from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import Category
-from django.views.generic import ListView, CreateView, TemplateView, DetailView
+from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView
 from .forms import Regisration_Form, Category_Form, Product_Form
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -13,7 +13,6 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 
-# add 2 view functions to see products and add products
 
 
 #crud 
@@ -71,15 +70,35 @@ class Add_Category(CreateView):
         form.save()
         return super(Add_Category, self).form_valid(form)
 
-def category_delete(request, pk):
-    category = Category.objects.get(pk = pk)
-    category.delete()
-    return redirect('menu')
+# def category_delete(request, pk):
+#     category = Category.objects.get(pk = pk)
+#     category.delete()
+#     return redirect('menu')
+
+class CategoryDeleteView(DeleteView):
+    template_name = 'menu/category_delete.html'
+    model = Category
+    context_object_name = 'category'
+    success_url = reverse_lazy('menu')
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ['title'] = 'delete_category'
+        context['categories'] = Category.objects.all()
+        return context
+
+
+
 
 class CategoryView(DetailView):
     template_name = 'menu/category_detail.html'
     model = Category
     context_object_name = 'category'
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ['title'] = 'category'
+        context['categories'] = Category.objects.all()
+        return context
+
 
     # def get_queryset(self):
     #     return Category.objects.get(pk=pk)
@@ -106,7 +125,17 @@ class Login_User_View(LoginView):
         context ['title'] = 'login'
         return context
 
-    
+class AddProduct(CreateView):
+    form_class = Product_Form
+    template_name = 'menu/addproduct.html'
+    # success_url = reverse_lazy('category')
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context ['title'] = 'category'
+        return context
+    def form_valid(self, form):
+        form.save()
+        return redirect("menu")
 
 def basket(request):
     categories = Category.objects.all()
